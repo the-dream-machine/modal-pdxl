@@ -1,0 +1,14 @@
+{
+  "include": ["src/**/*.py"],
+  "exclude": ["**/node_modules", "**/__pycache__"],
+  "ignore": [],
+  "defineConstant": {
+    "DEBUG": true
+  },
+  "reportUnusedImport": "warning",
+  "reportUnusedVariable": "warning",
+  "reportMissingImports": "error",
+  "reportMissingTypeStubs": false,
+  "pythonVersion": "3.12.5",
+  "pythonPlatform": "Darwin"
+}
