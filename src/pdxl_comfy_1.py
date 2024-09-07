@@ -14,7 +14,7 @@ image = (
     .pip_install("xformers==0.0.27.post2")
     .pip_install("git+https://github.com/hiddenswitch/ComfyUI.git", extra_options="--no-build-isolation")
     .run_commands("comfyui --create-directories")
-    .pip_install("comfy-script[default]", extra_options="--upgrade")
+    .pip_install("comfy-script[default]@git+https://github.com/Chaoses-Ib/ComfyScript.git", extra_options="--upgrade")
 )
 
 MODEL_URL = "https://civitai.com/api/download/models/290640"
@@ -27,9 +27,9 @@ class Model:
     def build(self):
         print("🛠️ Building container...")
 
-        os.makedirs(os.path.dirname(MODEL_FILE_PATH), exist_ok=True)
-        with open(MODEL_FILE_PATH, "wb") as file:
-            _ = file.write(requests.get(MODEL_URL).content)
+        # os.makedirs(os.path.dirname(MODEL_FILE_PATH), exist_ok=True)
+        # with open(MODEL_FILE_PATH, "wb") as file:
+        #     _ = file.write(requests.get(MODEL_URL).content)
 
     @modal.enter()
     def enter(self):
@@ -47,10 +47,11 @@ class Model:
         print("🎨 Generating image...")
 
         from comfy_script.runtime import Workflow
-        from comfy_script.runtime.nodes import CheckpointLoaderSimple, CLIPTextEncode, EmptyLatentImage, KSampler, VAEDecode, SaveImage
+        from comfy_script.runtime.nodes import CheckpointLoaderSimple, CLIPTextEncode, EmptyLatentImage, KSampler, VAEDecode, SaveImage, CivitAICheckpointLoader
 
         with Workflow(wait=True):
-            model, clip, vae = CheckpointLoaderSimple(MODEL_FILE_NAME)
+            # model, clip, vae = CheckpointLoaderSimple(MODEL_FILE_NAME)
+            model, clip, vae = CivitAICheckpointLoader('https://civitai.com/models/101055?modelVersionId=128078')
             conditioning = CLIPTextEncode('beautiful scenery nature glass bottle landscape, , purple galaxy bottle,', clip)
             conditioning2 = CLIPTextEncode('text, watermark', clip)
             latent = EmptyLatentImage(512, 512, 1)
