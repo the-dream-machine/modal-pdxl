@@ -57,7 +57,7 @@ class Model:
             latent = EmptyLatentImage(512, 512, 1)
             latent = KSampler(model, 156680208700286, 20, 8, 'euler', 'normal', conditioning, conditioning2, latent, 1)
             image = VAEDecode(latent, vae)
-            SaveImage(image, 'ComfyUI')
+            await SaveImage(image, 'ComfyUI')
 
 @app.local_entrypoint()
 def main(prompt: str):
